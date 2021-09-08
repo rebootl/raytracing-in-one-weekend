@@ -2,6 +2,8 @@ const c = document.getElementById("mycanvas");
 const ctx = c.getContext("2d");
  
 const width = c.width;
+import { Vector, Point, Color } from './classes.js';
+
 const height = c.height;
  
 const imagedata = ctx.createImageData(width, height);
@@ -23,5 +25,3 @@ for (let y = 0; y < height; y++) {
 }
 
 ctx.putImageData(imagedata, 0, 0);
-
-
