@@ -32,7 +32,14 @@ for (let y = 0; y < height; y++) {
     );*/
     const u = x / (width - 1);
     const v = (255 - y) / (height - 1);
-    const r = new Ray(origin, )
+    const r = new Ray(
+      origin,
+      lowerLeftCorner
+        .addVector(horizontal.scale(u))
+        .addVector(vertical.scale(v))
+        .subtractVector(origin)
+      );
+    const c = rayColor(r);
     
     writeColor(imagedata, width, x, y, c);
   }
