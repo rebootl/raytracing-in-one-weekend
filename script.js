@@ -16,7 +16,7 @@ const focalLength = 1.0;
 
 const origin = new Vector(0, 0, 0);
 const horizontal = new Vector(viewportWidth, 0, 0);
-const vertical = new Vector(0, viewportWidth, 0);
+const vertical = new Vector(0, viewportHeight, 0);
 const lowerLeftCorner = origin
   .subtractVector(horizontal.divide(2))
   .subtractVector(vertical.divide(2))
