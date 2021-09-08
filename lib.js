@@ -36,12 +36,6 @@ class Vector {
   }
 }
 
-/*class Point extends Vector {
-  constructor(x, y, z) {
-    super(x, y, z);
-  }
-}*/
-
 class Color {
   constructor(r, g, b) {
     this.r = r;

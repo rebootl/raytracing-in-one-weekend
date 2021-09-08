@@ -25,11 +25,6 @@ const lowerLeftCorner = origin
 for (let y = 0; y < height; y++) {
   for (let x = 0; x < width; x++) {
 
-    /*const c = new Color(
-      x / (width - 1),
-      (255 - y) / (height - 1),
-      0.25
-    );*/
     const u = x / (width - 1);
     const v = (255 - y) / (height - 1);
     const r = new Ray(
