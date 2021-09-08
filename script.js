@@ -1,8 +1,9 @@
+import { Vector, Color, Ray } from './classes.js';
+
 const c = document.getElementById("mycanvas"); 
 const ctx = c.getContext("2d");
  
 const width = c.width;
-import { Vector, Point, Color } from './classes.js';
 
 const height = c.height;
  
