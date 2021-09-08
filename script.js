@@ -3,10 +3,11 @@ import { Vector, Color, writeColor, Ray, rayColor } from './lib.js';
 const c = document.getElementById("mycanvas"); 
 const ctx = c.getContext("2d");
 
-const width = c.width;
-const height = c.height;
+const width = 300;
+const height = 200;
 const aspectRatio = width / height;
- 
+
+console.log(width, height)
 const imagedata = ctx.createImageData(width, height);
 
 // camera
@@ -18,8 +19,8 @@ const origin = new Vector(0, 0, 0);
 const horizontal = new Vector(viewportWidth, 0, 0);
 const vertical = new Vector(0, viewportHeight, 0);
 const lowerLeftCorner = origin
-  .subtractVector(horizontal.divide(2))
-  .subtractVector(vertical.divide(2))
+  .subtractVector(horizontal.divide(2.0))
+  .subtractVector(vertical.divide(2.0))
   .subtractVector(new Vector(0, 0, focalLength));
 
 for (let y = 0; y < height; y++) {
