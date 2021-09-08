@@ -2,12 +2,16 @@ import { Vector, Color, Ray } from './classes.js';
 
 const c = document.getElementById("mycanvas"); 
 const ctx = c.getContext("2d");
- 
-const width = c.width;
 
+const width = c.width;
 const height = c.height;
+const aspectRatio = width / height;
  
 const imagedata = ctx.createImageData(width, height);
+
+// camera
+const viewportHeight = 2.0;
+const viewportWidth = 2.0;
 
 function writeColor(x, y, c) {
     const pixelindex = (y * width + x) * 4;
