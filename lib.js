@@ -69,12 +69,22 @@ class Ray {
 }
 
 function rayColor(r) {
+  if (hitSphere(new Vector(0, 0, -1), 0.5, r))
+    return new Color(1, 0, 0);
+    
   const t = 0.5 * (r.direction.unit.y + 1.0)
   const c1 = new Color(1.0, 1.0, 1.0);
   const c2 = new Color(0.5, 0.7, 1.0);
   return c1.scale(1.0 - t).addColor(c2.scale(t));
 }
 
-
+function hitSphere(center, radius, r) {
+  const oc = r.origin.subtractVector(center);
+  const a = r.direction.dot(r.direction);
+  const b = oc.dot(r.direction) * 2.0;
+  const c = oc.dot(oc) - radius*radius;
+  const d = b*b - 4 * a * c;
+  return d > 0;
+}
 
 export { Vector, Color, writeColor, Ray, rayColor };
