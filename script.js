@@ -11,7 +11,10 @@ const imagedata = ctx.createImageData(width, height);
 
 // camera
 const viewportHeight = 2.0;
-const viewportWidth = 2.0;
+const viewportWidth = viewportHeight * aspectRatio;
+const focalLength = 1.0;
+
+const origin = new Vector(0, 0, 0);
 
 function writeColor(x, y, c) {
     const pixelindex = (y * width + x) * 4;
