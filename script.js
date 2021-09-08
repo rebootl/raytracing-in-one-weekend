@@ -1,4 +1,4 @@
-import { Vector, Color, writeColor, Ray } from './lib.js';
+import { Vector, Color, writeColor, Ray, rayColor } from './lib.js';
 
 const c = document.getElementById("mycanvas"); 
 const ctx = c.getContext("2d");
@@ -25,11 +25,14 @@ const lowerLeftCorner = origin
 for (let y = 0; y < height; y++) {
   for (let x = 0; x < width; x++) {
 
-    const c = new Color(
+    /*const c = new Color(
       x / (width - 1),
       (255 - y) / (height - 1),
       0.25
-    );
+    );*/
+    const u = x / (width - 1);
+    const v = (255 - y) / (height - 1);
+    const r = new Ray(origin, )
     
     writeColor(imagedata, width, x, y, c);
   }

@@ -48,6 +48,12 @@ class Color {
     this.g = g;
     this.b = b;
   }
+  scale(f) {
+    return new Color(this.r * f, this.g * f, this.b * f);
+  }
+  addColor(c) {
+    return new Color(this.r + c.r, this.g + c.g, this.b + c.b);
+  }
 }
 
 function writeColor(imagedata, width, x, y, c) {
@@ -69,7 +75,10 @@ class Ray {
 }
 
 function rayColor(r) {
-  const t = 0.5 * (r.unit.y + 1.0)
+  const t = 0.5 * (r.direction.unit.y + 1.0)
+  const c1 = new Color(1.0, 1.0, 1.0);
+  const c2 = new Color(0.5, 0.7, 1.0);
+  return c1.scale(1.0 - t).addColor(c2.scale(t));
 }
 
-export { Vector, Color, writeColor, Ray };
+export { Vector, Color, writeColor, Ray, rayColor };
