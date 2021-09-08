@@ -50,6 +50,14 @@ class Color {
   }
 }
 
+function writeColor(imagedata, width, x, y, c) {
+    const pixelindex = (y * width + x) * 4;
+    imagedata.data[pixelindex] = parseInt(c.r * 255.999);
+    imagedata.data[pixelindex+1] = parseInt(c.g * 255.999);
+    imagedata.data[pixelindex+2] = parseInt(c.b * 255.999);
+    imagedata.data[pixelindex+3] = 255;  
+}
+
 class Ray {
   constructor(origin, direction) {
     this.origin = origin;
@@ -60,4 +68,8 @@ class Ray {
   }
 }
 
-export { Vector, Color, Ray };
+function rayColor(r) {
+  const t = 0.5 * (r.unit.y + 1.0)
+}
+
+export { Vector, Color, writeColor, Ray };
