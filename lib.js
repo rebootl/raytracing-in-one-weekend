@@ -75,4 +75,6 @@ function rayColor(r) {
   return c1.scale(1.0 - t).addColor(c2.scale(t));
 }
 
+
+
 export { Vector, Color, writeColor, Ray, rayColor };
