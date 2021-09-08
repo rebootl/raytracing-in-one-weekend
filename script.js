@@ -15,6 +15,12 @@ const viewportWidth = viewportHeight * aspectRatio;
 const focalLength = 1.0;
 
 const origin = new Vector(0, 0, 0);
+const horizontal = new Vector(viewportWidth, 0, 0);
+const vertical = new Vector(0, viewportWidth, 0);
+const lowerLeftCorner = origin
+  .subtractVector(horizontal.divide(2))
+  .subtractVector(vertical.divide(2))
+  .subtractVector(new Vector(0, 0, focalLength));
 
 function writeColor(x, y, c) {
     const pixelindex = (y * width + x) * 4;

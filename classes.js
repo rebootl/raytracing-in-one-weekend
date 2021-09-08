@@ -15,6 +15,9 @@ class Vector {
   addVector(v) {
     return new Vector(v.x + this.x, v.y + this.y, v.z + this.z);
   }
+  subtractVector(v) {
+    return new Vector(this.x - v.x, this.y - v.y, this.z - v.z);
+  }
   scale(f) {
     return new Vector(this.x * f, this.y * f, this.z * f);
   }
