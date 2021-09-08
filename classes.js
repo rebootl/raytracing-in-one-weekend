@@ -12,11 +12,11 @@ class Vector {
     return this.divide(this.length);
   }
 
-  add_vector(v) {
-    return Vector(v.x + this.x, v.y + this.y, v.z + this.z);
+  addVector(v) {
+    return new Vector(v.x + this.x, v.y + this.y, v.z + this.z);
   }
   scale(f) {
-    return Vector(this.x * f, this.y * f, this.z * f);
+    return new Vector(this.x * f, this.y * f, this.z * f);
   }
   divide(f) {
     return this.scale(1/f);
@@ -25,7 +25,7 @@ class Vector {
     return v.x * this.x + v.y * this.y + v.z * this.z;
   }
   cross(v) {
-    return Vector(
+    return new Vector(
       this.y * v.z - this.z * v.y,
       this.z * v.x - this.x * v.z,
       this.x * v.y - this.y * v.x
@@ -33,11 +33,11 @@ class Vector {
   }
 }
 
-class Point extends Vector {
+/*class Point extends Vector {
   constructor(x, y, z) {
     super(x, y, z);
   }
-}
+}*/
 
 class Color {
   constructor(r, g, b) {
@@ -47,4 +47,14 @@ class Color {
   }
 }
 
-export { Vector, Point, Color };
+class Ray {
+  constructor(origin, direction) {
+    this.origin = origin;
+    this.direction = direction;
+  }
+  at(t) {
+    return this.origin.addVector(this.direction.scale(t));
+  }
+}
+
+export { Vector, Color, Ray };
