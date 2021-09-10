@@ -71,14 +71,17 @@ class Ray {
   }
 }
 
-function rayColor(r) {
-  let t = hitSphere(new Vector(0, 0, -1), 0.5, r);
-  if (t > 0.0) {
-    const N = r.at(t).subtractVector(new Vector(0, 0, -1.0)).unit;
-    return new Color(N.x + 1, N.y + 1, N.z + 1).scale(0.5);
+function rayColor(r, scene) {
+  //let t = hitSphere(new Vector(0, 0, -1), 0.5, r);
+  let rec = {};
+  if (scene.hit(r, 0, Infinity, rec)) {
+    return new Color(
+      rec.normal.x + 1,
+      rec.normal.y + 1,
+      rec.normal.z + 1).scale(0.5);
   }
-    
-  t = 0.5 * (r.direction.unit.y + 1.0)
+
+  const t = 0.5 * (r.direction.unit.y + 1.0)
   const c1 = new Color(1.0, 1.0, 1.0);
   const c2 = new Color(0.5, 0.7, 1.0);
   return c1.scale(1.0 - t).addColor(c2.scale(t));
@@ -167,4 +170,5 @@ class Scene {
   }
 }
 
-export { Vector, Color, writeColor, Ray, rayColor };
+export { Vector, Color, writeColor, Ray, rayColor,
+  Sphere, Scene };

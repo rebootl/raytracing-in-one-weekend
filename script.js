@@ -1,13 +1,18 @@
-import { Vector, Color, writeColor, Ray, rayColor } from './lib.js';
+import { Vector, Color, writeColor, Ray, rayColor,
+  Sphere, Scene } from './lib.js';
 
 const c = document.getElementById("mycanvas"); 
 const ctx = c.getContext("2d");
 
+// image
 const width = c.width;
 const height = c.height;
 const aspectRatio = width / height;
 
 const imagedata = ctx.createImageData(width, height);
+
+// world
+const scene = new Scene();
 
 // camera
 const viewportHeight = 2.0;
