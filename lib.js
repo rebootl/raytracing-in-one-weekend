@@ -96,4 +96,35 @@ function hitSphere(center, radius, r) {
   return (-halfb - Math.sqrt(d)) / a;
 }
 
+class SceneObject {
+  function hit(ray, tMin, tMax) {}
+}
+
+class Sphere extends SceneObject {
+  constructor(center, radius) {
+    this.center = center;
+    this.radius = radius;
+  }
+  hit(ray, tMin, tMax, hitRecord) {
+    const oc = r.origin.subtractVector(center);
+    const a = r.direction.lengthSquared;
+    const halfb = oc.dot(r.direction);
+    const c = oc.lengthSquared - radius*radius;
+    const d = halfb*halfb - a * c;
+    if (d < 0) return false;
+    
+    const sqrtd = Math.sqrt(d);
+    
+    const root = (-halfb - sqrtd) / a;
+    if (root < tMin || root > tMax) {
+      root = (-halfb + sqrtd) / a;
+      if (root < tMin || root > tMax)
+        return false;
+    }
+    
+    rec.t = root;
+    
+  }
+}
+
 export { Vector, Color, writeColor, Ray, rayColor };
