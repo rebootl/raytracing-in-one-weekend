@@ -67,15 +67,16 @@ class Ray {
     this.direction = direction;
   }
   at(t) {
-    return this.origin.addVector(this.direction.scale(t));
+    return this.origin
+      .addVector(this.direction.scale(t));
   }
 }
 
-function rayColor(r, scene) {
+function rayColor(ray, scene) {
   // hitrecord
   const rec = {};
 
-  if (scene.hit(r, 0, Infinity, rec)) {
+  if (scene.hit(ray, 0, Infinity, rec)) {
     return new Color(
       rec.normal.x + 1,
       rec.normal.y + 1,
@@ -83,7 +84,7 @@ function rayColor(r, scene) {
   }
 
   // background
-  const t = 0.5 * (r.direction.unit.y + 1.0)
+  const t = 0.5 * (ray.direction.unit.y + 1.0)
   const c1 = new Color(1.0, 1.0, 1.0);
   const c2 = new Color(0.5, 0.7, 1.0);
   return c1.scale(1.0 - t).addColor(c2.scale(t));
