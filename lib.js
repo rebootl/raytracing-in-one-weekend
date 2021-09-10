@@ -89,7 +89,7 @@ function hitSphere(center, radius, r) {
   const a = r.direction.lengthSquared;
   const halfb = oc.dot(r.direction);
   const c = oc.lengthSquared - radius*radius;
-  const d = halfb*halfb - 4 * a * c;
+  const d = halfb*halfb - a * c;
   if (d < 0) {
     return -1.0;
   }
