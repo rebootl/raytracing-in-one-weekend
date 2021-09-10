@@ -7,7 +7,6 @@ const width = c.width;
 const height = c.height;
 const aspectRatio = width / height;
 
-console.log(width, height)
 const imagedata = ctx.createImageData(width, height);
 
 // camera
