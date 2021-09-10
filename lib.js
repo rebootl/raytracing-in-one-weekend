@@ -143,4 +143,18 @@ class Sphere extends SceneObject {
   }
 }
 
+class Scene {
+  constructor() {
+    this.sceneObjects = [];
+  }
+  add(object) {
+    this.sceneObjects.push(object);
+  }
+  hit(ray, tMin, tMax, rec) {
+    let hitAnything = false;
+    let closestSoFar = tMax;
+    
+  }
+}
+
 export { Vector, Color, writeColor, Ray, rayColor };
