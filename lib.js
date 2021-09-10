@@ -97,9 +97,11 @@ function hitSphere(center, radius, r) {
 }
 
 class hitRecord {
-  constructor()
   setFaceNormal(r, outwardNormal) {
-    
+    const frontFace = r.direction.dot(outwardNormal) < 0;
+    this.normal = frontFace ?
+      outwardNormal :
+      outwardNormal.scale(-1.0);
   }
 }
 
@@ -132,7 +134,10 @@ class Sphere extends SceneObject {
     
     rec.t = root;
     rec.p = ray.at(rec.t);
-    rec.normal = (rec.p - this.center) / this.radius;
+    const outwardNormal = rec.p
+      .subtractVector(this.center)
+      .divide(this.radius);
+    rec.setFaceNormal(ray, outwardNormal);
 
     return true;
   }
