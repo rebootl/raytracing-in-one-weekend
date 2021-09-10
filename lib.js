@@ -151,6 +151,7 @@ class Scene {
     this.sceneObjects.push(object);
   }
   hit(ray, tMin, tMax, rec) {
+    let tempRec = new hitRecord();
     let hitAnything = false;
     let closestSoFar = tMax;
     
