@@ -155,6 +155,15 @@ class Scene {
     let hitAnything = false;
     let closestSoFar = tMax;
     
+    this.sceneObjects.forEach(obj => {
+      if (obj.hit(ray, tMin, closestSoFar, tempRec)) {
+        hitAnything = true;
+        closestSoFar = tempRec.t;
+        rec = tempRec;
+      }
+    });
+    
+    return hitAnything;
   }
 }
 
