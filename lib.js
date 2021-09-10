@@ -96,8 +96,16 @@ function hitSphere(center, radius, r) {
   return (-halfb - Math.sqrt(d)) / a;
 }
 
+class hitRecord {
+  constructor()
+  setFaceNormal(r, outwardNormal) {
+    
+  }
+}
+
 class SceneObject {
-  function hit(ray, tMin, tMax) {}
+  constructor() {}
+  hit(ray, tMin, tMax) {}
 }
 
 class Sphere extends SceneObject {
@@ -105,11 +113,11 @@ class Sphere extends SceneObject {
     this.center = center;
     this.radius = radius;
   }
-  hit(ray, tMin, tMax, hitRecord) {
-    const oc = r.origin.subtractVector(center);
-    const a = r.direction.lengthSquared;
-    const halfb = oc.dot(r.direction);
-    const c = oc.lengthSquared - radius*radius;
+  hit(ray, tMin, tMax, rec) {
+    const oc = ray.origin.subtractVector(this.center);
+    const a = ray.direction.lengthSquared;
+    const halfb = oc.dot(ray.direction);
+    const c = oc.lengthSquared - this.radius*this.radius;
     const d = halfb*halfb - a * c;
     if (d < 0) return false;
     
@@ -123,7 +131,10 @@ class Sphere extends SceneObject {
     }
     
     rec.t = root;
-    
+    rec.p = ray.at(rec.t);
+    rec.normal = (rec.p - this.center) / this.radius;
+
+    return true;
   }
 }
 
