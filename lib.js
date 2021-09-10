@@ -73,7 +73,7 @@ function rayColor(r) {
   if (t > 0.0) {
     //return new Color(1, 0, 0);
     const N = r.at(t).subtractVector(new Vector(0, 0, -1.0)).unit;
-    const c = new Color(N.x + 1)
+    return new Color(N.x + 1, N.y + 1, N.z + 1).scale(0.5);
   }
     
   t = 0.5 * (r.direction.unit.y + 1.0)
