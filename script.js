@@ -14,6 +14,7 @@ const imagedata = ctx.createImageData(width, height);
 // world
 const scene = new Scene();
 scene.add(new Sphere(new Vector(0, 0, -1), 0.5));
+scene.add(new Sphere(new Vector(0, -100.5, -1), 100));
 
 // camera
 const viewportHeight = 2.0;

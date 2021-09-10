@@ -72,8 +72,9 @@ class Ray {
 }
 
 function rayColor(r, scene) {
-  //let t = hitSphere(new Vector(0, 0, -1), 0.5, r);
-  let rec = {};
+  // hitrecord
+  const rec = {};
+
   if (scene.hit(r, 0, Infinity, rec)) {
     return new Color(
       rec.normal.x + 1,
@@ -81,31 +82,18 @@ function rayColor(r, scene) {
       rec.normal.z + 1).scale(0.5);
   }
 
+  // background
   const t = 0.5 * (r.direction.unit.y + 1.0)
   const c1 = new Color(1.0, 1.0, 1.0);
   const c2 = new Color(0.5, 0.7, 1.0);
   return c1.scale(1.0 - t).addColor(c2.scale(t));
 }
 
-/*function hitSphere(center, radius, r) {
-  const oc = r.origin.subtractVector(center);
-  const a = r.direction.lengthSquared;
-  const halfb = oc.dot(r.direction);
-  const c = oc.lengthSquared - radius*radius;
-  const d = halfb*halfb - a * c;
-  if (d < 0) {
-    return -1.0;
-  }
-  return (-halfb - Math.sqrt(d)) / a;
-}*/
-
-class hitRecord {
-  setFaceNormal(r, outwardNormal) {
-    const frontFace = r.direction.dot(outwardNormal) < 0;
-    this.normal = frontFace ?
-      outwardNormal :
-      outwardNormal.scale(-1.0);
-  }
+function setFaceNormal(r, outwardNormal) {
+  const frontFace = r.direction.dot(outwardNormal) < 0;
+  return frontFace ?
+    outwardNormal :
+    outwardNormal.scale(-1.0);
 }
 
 /*class SceneObject {
@@ -128,7 +116,7 @@ class Sphere {
     
     const sqrtd = Math.sqrt(d);
     
-    const root = (-halfb - sqrtd) / a;
+    let root = (-halfb - sqrtd) / a;
     if (root < tMin || root > tMax) {
       root = (-halfb + sqrtd) / a;
       if (root < tMin || root > tMax)
@@ -140,7 +128,7 @@ class Sphere {
     const outwardNormal = rec.p
       .subtractVector(this.center)
       .divide(this.radius);
-    rec.setFaceNormal(ray, outwardNormal);
+    rec.normal = setFaceNormal(ray, outwardNormal);
 
     return true;
   }
@@ -154,7 +142,7 @@ class Scene {
     this.sceneObjects.push(object);
   }
   hit(ray, tMin, tMax, rec) {
-    let tempRec = new hitRecord();
+    let tempRec = {};
     let hitAnything = false;
     let closestSoFar = tMax;
     
@@ -162,7 +150,9 @@ class Scene {
       if (obj.hit(ray, tMin, closestSoFar, tempRec)) {
         hitAnything = true;
         closestSoFar = tempRec.t;
-        rec = tempRec;
+        rec.t = tempRec.t;
+        rec.p = tempRec.p;
+        rec.normal = tempRec.normal;
       }
     });
     
