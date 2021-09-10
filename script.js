@@ -13,6 +13,7 @@ const imagedata = ctx.createImageData(width, height);
 
 // world
 const scene = new Scene();
+scene.add(new Sphere(new Vector(0, 0, -1), 0.5));
 
 // camera
 const viewportHeight = 2.0;
@@ -39,7 +40,7 @@ for (let y = 0; y < height; y++) {
         .addVector(vertical.scale(v))
         .subtractVector(origin)
       );
-    const c = rayColor(r);
+    const c = rayColor(r, scene);
     
     writeColor(imagedata, width, x, y, c);
   }

@@ -87,7 +87,7 @@ function rayColor(r, scene) {
   return c1.scale(1.0 - t).addColor(c2.scale(t));
 }
 
-function hitSphere(center, radius, r) {
+/*function hitSphere(center, radius, r) {
   const oc = r.origin.subtractVector(center);
   const a = r.direction.lengthSquared;
   const halfb = oc.dot(r.direction);
@@ -97,7 +97,7 @@ function hitSphere(center, radius, r) {
     return -1.0;
   }
   return (-halfb - Math.sqrt(d)) / a;
-}
+}*/
 
 class hitRecord {
   setFaceNormal(r, outwardNormal) {
@@ -108,12 +108,12 @@ class hitRecord {
   }
 }
 
-class SceneObject {
+/*class SceneObject {
   constructor() {}
   hit(ray, tMin, tMax) {}
-}
+}*/
 
-class Sphere extends SceneObject {
+class Sphere {
   constructor(center, radius) {
     this.center = center;
     this.radius = radius;
