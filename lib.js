@@ -61,9 +61,9 @@ function writeColor(imagedata, width, x, y, c, samplesPerPixel) {
     const g = c.g * s;
     const b = c.b * s;
   
-    imagedata.data[pixelindex] = parseInt(c.r * 255.999);
-    imagedata.data[pixelindex+1] = parseInt(c.g * 255.999);
-    imagedata.data[pixelindex+2] = parseInt(c.b * 255.999);
+    imagedata.data[pixelindex] = parseInt(256 * clamp(r, 0.0, 0.999));
+    imagedata.data[pixelindex+1] = parseInt(256 * clamp(g, 0.0, 0.999));
+    imagedata.data[pixelindex+2] = parseInt(256 * clamp(b, 0.0, 0.999));
     imagedata.data[pixelindex+3] = 255;  
 }
 
