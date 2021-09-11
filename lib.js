@@ -53,8 +53,14 @@ class Color {
   }
 }
 
-function writeColor(imagedata, width, x, y, c) {
+function writeColor(imagedata, width, x, y, c, samplesPerPixel) {
     const pixelindex = (y * width + x) * 4;
+  
+    const s = 1.0 / samplesPerPixel;
+    const r = c.r * s;
+    const g = c.g * s;
+    const b = c.b * s;
+  
     imagedata.data[pixelindex] = parseInt(c.r * 255.999);
     imagedata.data[pixelindex+1] = parseInt(c.g * 255.999);
     imagedata.data[pixelindex+2] = parseInt(c.b * 255.999);
@@ -187,5 +193,9 @@ class Camera {
   }
 }
 
+function clamp(v, min, max) {
+  return Math.max(Math.min(v, max), min);
+}
+
 export { Vector, Color, writeColor, Ray, rayColor,
-  Sphere, Scene, Camera };
+  Sphere, Scene, Camera, clamp };

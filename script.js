@@ -24,13 +24,7 @@ for (let y = 0; y < height; y++) {
 
     const u = x / (width - 1);
     const v = (height - y) / (height - 1);
-    const r = new Ray(
-      origin,
-      lowerLeftCorner
-        .addVector(horizontal.scale(u))
-        .addVector(vertical.scale(v))
-        .subtractVector(origin)
-      );
+    const r = camera.getRay(u, v);
     const c = rayColor(r, scene);
     
     writeColor(imagedata, width, x, y, c);
