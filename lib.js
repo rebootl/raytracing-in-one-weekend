@@ -161,5 +161,31 @@ class Scene {
   }
 }
 
+class Camera {
+  constructor(aspectRatio) {
+    this.aspectRatio = aspectRatio;
+    this.viewportHeight = 2.0;
+    this.viewportWidth = this.viewportHeight * aspectRatio;
+    this.focalLength = 1.0;
+
+    this.origin = new Vector(0, 0, 0);
+    this.horizontal = new Vector(this.viewportWidth, 0, 0);
+    this.vertical = new Vector(0, this.viewportHeight, 0);
+    this.lowerLeftCorner = this.origin
+      .subtractVector(this.horizontal.divide(2))
+      .subtractVector(this.vertical.divide(2))
+      .subtractVector(new Vector(0, 0, this.focalLength));
+  }
+  getRay(u, v) {
+    return new Ray(
+      this.origin,
+      this.lowerLeftCorner
+        .addVector(this.horizontal.scale(u))
+        .addVector(this.vertical.scale(v))
+        .subtractVector(this.origin)
+      );
+  }
+}
+
 export { Vector, Color, writeColor, Ray, rayColor,
-  Sphere, Scene };
+  Sphere, Scene, Camera };
