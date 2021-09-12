@@ -4,7 +4,7 @@ class Vector {
     this.y = y;
     this.z = z;
   }
-  
+
   get length() {
     return Math.sqrt(this.lengthSquared);
   }
@@ -55,16 +55,16 @@ class Color {
 
 function writeColor(imagedata, width, x, y, c, samplesPerPixel) {
     const pixelindex = (y * width + x) * 4;
-  
+
     const s = 1.0 / samplesPerPixel;
-    const r = c.r * s;
-    const g = c.g * s;
-    const b = c.b * s;
-  
+    const r = Math.sqrt(c.r * s);
+    const g = Math.sqrt(c.g * s);
+    const b = Math.sqrt(c.b * s);
+
     imagedata.data[pixelindex] = parseInt(256 * clamp(r, 0.0, 0.999));
     imagedata.data[pixelindex+1] = parseInt(256 * clamp(g, 0.0, 0.999));
     imagedata.data[pixelindex+2] = parseInt(256 * clamp(b, 0.0, 0.999));
-    imagedata.data[pixelindex+3] = 255;  
+    imagedata.data[pixelindex+3] = 255;
 }
 
 class Ray {
@@ -78,15 +78,28 @@ class Ray {
   }
 }
 
-function rayColor(ray, scene) {
+function rayColor(ray, scene, depth = 50) {
   // hitrecord
   const rec = {};
 
-  if (scene.hit(ray, 0, Infinity, rec)) {
-    return new Color(
+  if (depth <= 0)
+    return new Color(0, 0, 0);
+
+  if (scene.hit(ray, 0.001, Infinity, rec)) {
+    const target = rec.p
+      .addVector(rec.normal)
+      .addVector(getRandomVectorInUnitSphere());
+
+    return rayColor(new Ray(
+      rec.p,
+      target.subtractVector(rec.p)),
+      scene,
+      depth - 1
+    ).scale(0.5);
+    /*return new Color(
       rec.normal.x + 1,
       rec.normal.y + 1,
-      rec.normal.z + 1).scale(0.5);
+      rec.normal.z + 1).scale(0.5);*/
   }
 
   // background
@@ -120,16 +133,16 @@ class Sphere {
     const c = oc.lengthSquared - this.radius*this.radius;
     const d = halfb*halfb - a * c;
     if (d < 0) return false;
-    
+
     const sqrtd = Math.sqrt(d);
-    
+
     let root = (-halfb - sqrtd) / a;
     if (root < tMin || root > tMax) {
       root = (-halfb + sqrtd) / a;
       if (root < tMin || root > tMax)
         return false;
     }
-    
+
     rec.t = root;
     rec.p = ray.at(rec.t);
     const outwardNormal = rec.p
@@ -152,7 +165,7 @@ class Scene {
     let tempRec = {};
     let hitAnything = false;
     let closestSoFar = tMax;
-    
+
     this.sceneObjects.forEach(obj => {
       if (obj.hit(ray, tMin, closestSoFar, tempRec)) {
         hitAnything = true;
@@ -162,7 +175,7 @@ class Scene {
         rec.normal = tempRec.normal;
       }
     });
-    
+
     return hitAnything;
   }
 }
@@ -195,6 +208,22 @@ class Camera {
 
 function clamp(v, min, max) {
   return Math.max(Math.min(v, max), min);
+}
+
+function getRandom(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function getRandomVector(min, max) {
+  return new Vector(getRandom(-1, 1), getRandom(-1, 1), getRandom(-1, 1));
+}
+
+function getRandomVectorInUnitSphere() {
+  while (true) {
+    const p = getRandomVector(-1, 1);
+    if (p.lengthSquared >= 1) continue;
+    return p;
+  }
 }
 
 export { Vector, Color, writeColor, Ray, rayColor,

@@ -1,13 +1,15 @@
 import { Vector, Color, writeColor, Ray, rayColor,
   Sphere, Scene, Camera } from './lib.js';
 
-const c = document.getElementById("mycanvas"); 
+const c = document.getElementById("mycanvas");
 const ctx = c.getContext("2d");
 
 // image
 const width = c.width;
 const height = c.height;
 const aspectRatio = width / height;
+const samplesPerPixel = 25;
+const maxDepth = 50;
 
 const imagedata = ctx.createImageData(width, height);
 
@@ -22,12 +24,14 @@ const camera = new Camera(aspectRatio);
 for (let y = 0; y < height; y++) {
   for (let x = 0; x < width; x++) {
 
-    const u = x / (width - 1);
-    const v = (height - y) / (height - 1);
-    const r = camera.getRay(u, v);
-    const c = rayColor(r, scene);
-    
-    writeColor(imagedata, width, x, y, c);
+    let pixelColor = new Color(0, 0, 0);
+    for (let s = 0; s < samplesPerPixel; ++s) {
+      const u = (x + Math.random()) / (width - 1);
+      const v = (height - y + Math.random()) / (height - 1);
+      const r = camera.getRay(u, v);
+      pixelColor = pixelColor.addColor(rayColor(r, scene, maxDepth));
+    }
+    writeColor(imagedata, width, x, y, pixelColor, samplesPerPixel);
   }
 }
 
