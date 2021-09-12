@@ -87,8 +87,7 @@ function rayColor(ray, scene, depth = 50) {
 
   if (scene.hit(ray, 0.001, Infinity, rec)) {
     const target = rec.p
-      .addVector(rec.normal)
-      .addVector(getRandomVectorInUnitSphere());
+      .addVector(getRandomVectorInHemisphere(rec.normal));
 
     return rayColor(new Ray(
       rec.p,
@@ -224,6 +223,14 @@ function getRandomVectorInUnitSphere() {
     if (p.lengthSquared >= 1) continue;
     return p;
   }
+}
+
+function getRandomVectorInHemisphere(normal) {
+  const r = getRandomVectorInUnitSphere();
+  if (r.dot(normal) > 0.0)
+    return r;
+  else
+    return r.scale(-1.0);
 }
 
 export { Vector, Color, writeColor, Ray, rayColor,
