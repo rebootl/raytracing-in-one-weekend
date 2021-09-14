@@ -12,9 +12,43 @@
   </head>
   <body>
 
-    <canvas id="mycanvas" width="500" height="380"></canvas>
-    <!--<progress id="render-progress" max="100" value="0"></progress>
-    <button id="cancel-render">Cancel Render</button>-->
+    <style>
+      .settings-box {
+        display: flex;
+        flex-flow: column;
+        gap: 5px;
+      }
+    </style>
+
+    <canvas id="mycanvas" width="320" height="220"></canvas>
+    <h3>Image settings:</h3>
+    <div class="settings-box">
+      <div>
+        <input id="width" value="320" size="10">
+        <label for="width">Width</label>
+      </div>
+      <div>
+        <input id="height" value="220" size="10">
+        <label for="height">Height</label>
+      </div>
+    </div>
+    <h3>Render:</h3>
+    <div class="settings-box">
+      <div>
+        <input id="samples" value="25" size="10">
+        <label for="samples">Samples/pixel</label>
+      </div>
+      <div>
+        <input id="maxdepth" value="50" size="10">
+        <label for="maxdepth">Max. depth</label>
+      </div>
+      <div>
+        <button id="render-button">Render</button>
+        <!--<span id="progress"></span>-->
+      </div>
+      <!--<progress id="progressbar" max="100" value="0"></progress>
+      <button id="cancel-render">Cancel Render</button>-->
+    </div>
 
   </body>
 </html>

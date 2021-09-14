@@ -14,7 +14,11 @@ class Vector {
   get unit() {
     return this.divide(this.length);
   }
-
+  get nearZero() {
+    const s = 1e-8;
+    return Math.abs(this.x) < s && Math.abs(this.y) < s &&
+      Math.abs(this.z) < s;
+  }
   addVector(v) {
     return new Vector(v.x + this.x, v.y + this.y, v.z + this.z);
   }
@@ -51,6 +55,9 @@ class Color {
   addColor(c) {
     return new Color(this.r + c.r, this.g + c.g, this.b + c.b);
   }
+  mulColor(c) {
+    return new Color(this.r * c.r, this.g * c.g, this.b * c.b);
+  }
 }
 
 function writeColor(imagedata, width, x, y, c, samplesPerPixel) {
@@ -78,36 +85,6 @@ class Ray {
   }
 }
 
-function rayColor(ray, scene, depth = 50) {
-  // hitrecord
-  const rec = {};
-
-  if (depth <= 0)
-    return new Color(0, 0, 0);
-
-  if (scene.hit(ray, 0.001, Infinity, rec)) {
-    const target = rec.p
-      .addVector(getRandomVectorInHemisphere(rec.normal));
-
-    return rayColor(new Ray(
-      rec.p,
-      target.subtractVector(rec.p)),
-      scene,
-      depth - 1
-    ).scale(0.5);
-    /*return new Color(
-      rec.normal.x + 1,
-      rec.normal.y + 1,
-      rec.normal.z + 1).scale(0.5);*/
-  }
-
-  // background
-  const t = 0.5 * (ray.direction.unit.y + 1.0)
-  const c1 = new Color(1.0, 1.0, 1.0);
-  const c2 = new Color(0.5, 0.7, 1.0);
-  return c1.scale(1.0 - t).addColor(c2.scale(t));
-}
-
 function setFaceNormal(r, outwardNormal) {
   const frontFace = r.direction.dot(outwardNormal) < 0;
   return frontFace ?
@@ -121,9 +98,10 @@ function setFaceNormal(r, outwardNormal) {
 }*/
 
 class Sphere {
-  constructor(center, radius) {
+  constructor(center, radius, material) {
     this.center = center;
     this.radius = radius;
+    this.material = material;
   }
   hit(ray, tMin, tMax, rec) {
     const oc = ray.origin.subtractVector(this.center);
@@ -149,6 +127,8 @@ class Sphere {
       .divide(this.radius);
     rec.normal = setFaceNormal(ray, outwardNormal);
 
+    rec.material = this.material;
+
     return true;
   }
 }
@@ -172,6 +152,7 @@ class Scene {
         rec.t = tempRec.t;
         rec.p = tempRec.p;
         rec.normal = tempRec.normal;
+        rec.material = tempRec.material;
       }
     });
 
@@ -233,5 +214,20 @@ function getRandomVectorInHemisphere(normal) {
     return r.scale(-1.0);
 }
 
-export { Vector, Color, writeColor, Ray, rayColor,
-  Sphere, Scene, Camera, clamp };
+class DiffuseMaterial {
+  constructor(color) {
+    this.color = color;
+  }
+  scatter(ray, rec) {
+    const scatterDirection = rec.normal
+      .addVector(getRandomVectorInUnitSphere());
+    if (scatterDirection.nearZero)
+      scatterDirection = rec.normal;
+    rec.scatteredRay = new Ray(rec.p, scatterDirection);
+    rec.attenuation = this.color;
+    return true;
+  }
+}
+
+export { Vector, Color, writeColor, Ray, getRandomVectorInUnitSphere,
+  Sphere, Scene, Camera, clamp, DiffuseMaterial };
