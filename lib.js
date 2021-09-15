@@ -41,6 +41,9 @@ class Vector {
       this.x * v.y - this.y * v.x
     );
   }
+  reflect(normal) {
+    return this.subtractVector(normal.scale(this.dot(normal) * 2.0));
+  }
 }
 
 class Color {
@@ -229,5 +232,17 @@ class DiffuseMaterial {
   }
 }
 
+class MetalMaterial {
+  constructor(color) {
+    this.color = color;
+  }
+  scatter(ray, rec) {
+    const reflected = ray.direction.unit.reflect(rec.normal);
+    rec.scatteredRay = new Ray(rec.p, reflected);
+    rec.attenuation = this.color;
+    return rec.scatteredRay.direction.dot(rec.normal) > 0;
+  }
+}
+
 export { Vector, Color, writeColor, Ray, getRandomVectorInUnitSphere,
-  Sphere, Scene, Camera, clamp, DiffuseMaterial };
+  Sphere, Scene, Camera, clamp, DiffuseMaterial, MetalMaterial };
