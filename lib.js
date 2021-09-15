@@ -233,12 +233,16 @@ class DiffuseMaterial {
 }
 
 class MetalMaterial {
-  constructor(color) {
+  constructor(color, fuzz = 0) {
     this.color = color;
+    this.fuzz = fuzz < 1 ? fuzz : 1;
   }
   scatter(ray, rec) {
     const reflected = ray.direction.unit.reflect(rec.normal);
-    rec.scatteredRay = new Ray(rec.p, reflected);
+    rec.scatteredRay = new Ray(
+      rec.p,
+      reflected.addVector(getRandomVectorInUnitSphere().scale(this.fuzz))
+    );
     rec.attenuation = this.color;
     return rec.scatteredRay.direction.dot(rec.normal) > 0;
   }

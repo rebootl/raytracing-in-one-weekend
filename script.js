@@ -50,10 +50,12 @@ function main() {
     new Color(0.7, 0.3, 0.3)
   );
   const materialLeft = new MetalMaterial(
-    new Color(0.8, 0.8, 0.8)
+    new Color(0.8, 0.8, 0.8),
+    0.3
   );
   const materialRight = new MetalMaterial(
-    new Color(0.8, 0.6, 0.2)
+    new Color(0.8, 0.6, 0.2),
+    1.0
   );
   scene.add(new Sphere(new Vector(0, -100.5, -1), 100, materialGround));
   scene.add(new Sphere(new Vector(0, 0, -1), 0.5, materialCenter));
