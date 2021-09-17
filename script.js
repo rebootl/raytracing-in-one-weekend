@@ -43,7 +43,7 @@ function main() {
 
   // world
   const scene = new Scene();
-
+/*
   const materialGround = new DiffuseMaterial(
     new Color(0.8, 0.8, 0.0)
   );
@@ -60,9 +60,21 @@ function main() {
   scene.add(new Sphere(new Vector(-1, 0, -1), 0.5, materialLeft));
   scene.add(new Sphere(new Vector(-1, 0, -1), -0.4, materialLeft));
   scene.add(new Sphere(new Vector(1, 0, -1), 0.5, materialRight));
+*/
+  const R = Math.cos(Math.PI / 4);
+
+  const materialLeft = new DiffuseMaterial(
+    new Color(0., 0., 1.0)
+  );
+  const materialRight = new DiffuseMaterial(
+    new Color(1., 0., 0.)
+  );
+
+  scene.add(new Sphere(new Vector(-R, 0, -1), R, materialLeft));
+  scene.add(new Sphere(new Vector(R, 0, -1), R, materialRight));
 
   // camera
-  const camera = new Camera(aspectRatio);
+  const camera = new Camera(90, aspectRatio);
 
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {

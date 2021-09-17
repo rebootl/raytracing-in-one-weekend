@@ -177,9 +177,12 @@ class Scene {
 }
 
 class Camera {
-  constructor(aspectRatio) {
+  constructor(vfov, aspectRatio) {
+    const theta = deg2rad(vfov);
+    const h = Math.tan(theta / 2);
+
     this.aspectRatio = aspectRatio;
-    this.viewportHeight = 2.0;
+    this.viewportHeight = 2.0 * h;
     this.viewportWidth = this.viewportHeight * aspectRatio;
     this.focalLength = 1.0;
 
@@ -200,6 +203,10 @@ class Camera {
         .subtractVector(this.origin)
       );
   }
+}
+
+function deg2rad(deg) {
+  return Math.PI * deg / 180.0;
 }
 
 function clamp(v, min, max) {
