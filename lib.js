@@ -44,6 +44,16 @@ class Vector {
   reflect(normal) {
     return this.subtractVector(normal.scale(this.dot(normal) * 2.0));
   }
+  refract(normal, refractionRatio) {
+    const cosTheta = Math.min(this.scale(-1.0).dot(normal), 1.0);
+    const rOutPerp = this.addVector(normal
+      .scale(cosTheta))
+      .scale(refractionRatio);
+    const rOutParallel = normal.scale(-Math.sqrt(
+      Math.abs(1.0 - rOutPerp.lengthSquared)
+    ));
+    return rOutPerp.addVector(rOutParallel);
+  }
 }
 
 class Color {
@@ -128,7 +138,9 @@ class Sphere {
     const outwardNormal = rec.p
       .subtractVector(this.center)
       .divide(this.radius);
-    rec.normal = setFaceNormal(ray, outwardNormal);
+    rec.frontFace = ray.direction.dot(outwardNormal) < 0;
+    rec.normal = rec.frontFace ? outwardNormal
+      : outwardNormal.scale(-1.0);
 
     rec.material = this.material;
 
@@ -155,6 +167,7 @@ class Scene {
         rec.t = tempRec.t;
         rec.p = tempRec.p;
         rec.normal = tempRec.normal;
+        rec.frontFace = tempRec.frontFace;
         rec.material = tempRec.material;
       }
     });
@@ -248,5 +261,32 @@ class MetalMaterial {
   }
 }
 
+class RefractingMaterial {
+  constructor(ir) {
+    this.ir = ir;
+  }
+  scatter(ray, rec) {
+    rec.attenuation = new Color(1.0, 1.0, 1.0);
+    const refractionRatio = rec.frontFace ? 1.0 / this.ir : this.ir;
+    const unitDirection = ray.direction.unit;
+
+    const cosTheta = Math.min(unitDirection.scale(-1.0)
+      .dot(rec.normal), 1.0);
+    const sinTheta = Math.sqrt(1.0 - cosTheta*cosTheta);
+
+    const cannotRefract = refractionRatio * sinTheta > 1.0;
+
+    let direction;
+    if (cannotRefract)
+      direction = unitDirection.reflect(rec.normal);
+    else
+      direction = unitDirection.refract(rec.normal, refractionRatio);
+
+    rec.scatteredRay = new Ray(rec.p, direction);
+    return true;
+  }
+}
+
 export { Vector, Color, writeColor, Ray, getRandomVectorInUnitSphere,
-  Sphere, Scene, Camera, clamp, DiffuseMaterial, MetalMaterial };
+  Sphere, Scene, Camera, clamp, DiffuseMaterial, MetalMaterial,
+  RefractingMaterial };

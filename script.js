@@ -1,5 +1,6 @@
 import { Vector, Color, writeColor, Ray, getRandomVectorInUnitSphere,
-  Sphere, Scene, Camera, DiffuseMaterial, MetalMaterial } from './lib.js';
+  Sphere, Scene, Camera, DiffuseMaterial, MetalMaterial,
+  RefractingMaterial } from './lib.js';
 
 
 function rayColor(ray, scene, depth = 50) {
@@ -47,15 +48,12 @@ function main() {
     new Color(0.8, 0.8, 0.0)
   );
   const materialCenter = new DiffuseMaterial(
-    new Color(0.7, 0.3, 0.3)
+    new Color(0.1, 0.2, 0.5)
   );
-  const materialLeft = new MetalMaterial(
-    new Color(0.8, 0.8, 0.8),
-    0.3
-  );
+  const materialLeft = new RefractingMaterial(1.5);
   const materialRight = new MetalMaterial(
     new Color(0.8, 0.6, 0.2),
-    1.0
+    0.0
   );
   scene.add(new Sphere(new Vector(0, -100.5, -1), 100, materialGround));
   scene.add(new Sphere(new Vector(0, 0, -1), 0.5, materialCenter));
