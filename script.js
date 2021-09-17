@@ -58,6 +58,7 @@ function main() {
   scene.add(new Sphere(new Vector(0, -100.5, -1), 100, materialGround));
   scene.add(new Sphere(new Vector(0, 0, -1), 0.5, materialCenter));
   scene.add(new Sphere(new Vector(-1, 0, -1), 0.5, materialLeft));
+  scene.add(new Sphere(new Vector(-1, 0, -1), -0.4, materialLeft));
   scene.add(new Sphere(new Vector(1, 0, -1), 0.5, materialRight));
 
   // camera

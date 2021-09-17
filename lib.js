@@ -277,13 +277,19 @@ class RefractingMaterial {
     const cannotRefract = refractionRatio * sinTheta > 1.0;
 
     let direction;
-    if (cannotRefract)
+    if (cannotRefract || this.reflectance(cosTheta, refractionRatio)
+      > Math.random())
       direction = unitDirection.reflect(rec.normal);
     else
       direction = unitDirection.refract(rec.normal, refractionRatio);
 
     rec.scatteredRay = new Ray(rec.p, direction);
     return true;
+  }
+  reflectance(cosine, refIdx) {
+    const r0 = (1 - refIdx) / (1 + refIdx);
+    const r0sq = r0 * r0;
+    return r0sq + (1 - r0sq) * Math.pow((1- cosine), 5);
   }
 }
 
