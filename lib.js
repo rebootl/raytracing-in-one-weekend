@@ -177,7 +177,7 @@ class Scene {
 }
 
 class Camera {
-  constructor(vfov, aspectRatio) {
+  constructor(lookFrom, lookAt, vup, vfov, aspectRatio) {
     const theta = deg2rad(vfov);
     const h = Math.tan(theta / 2);
 
@@ -186,13 +186,17 @@ class Camera {
     this.viewportWidth = this.viewportHeight * aspectRatio;
     this.focalLength = 1.0;
 
-    this.origin = new Vector(0, 0, 0);
-    this.horizontal = new Vector(this.viewportWidth, 0, 0);
-    this.vertical = new Vector(0, this.viewportHeight, 0);
+    const w = lookFrom.subtractVector(lookAt).unit;
+    const u = vup.cross(w).unit;
+    const v = w.cross(u);
+
+    this.origin = lookFrom;
+    this.horizontal = u.scale(this.viewportWidth);
+    this.vertical = v.scale(this.viewportHeight);
     this.lowerLeftCorner = this.origin
       .subtractVector(this.horizontal.divide(2))
       .subtractVector(this.vertical.divide(2))
-      .subtractVector(new Vector(0, 0, this.focalLength));
+      .subtractVector(w);
   }
   getRay(u, v) {
     return new Ray(

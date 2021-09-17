@@ -43,38 +43,26 @@ function main() {
 
   // world
   const scene = new Scene();
-/*
-  const materialGround = new DiffuseMaterial(
-    new Color(0.8, 0.8, 0.0)
-  );
-  const materialCenter = new DiffuseMaterial(
-    new Color(0.1, 0.2, 0.5)
-  );
+
+  const materialGround = new DiffuseMaterial(new Color(0.8, 0.8, 0.0));
+  const materialCenter = new DiffuseMaterial(new Color(0.1, 0.2, 0.5));
   const materialLeft = new RefractingMaterial(1.5);
-  const materialRight = new MetalMaterial(
-    new Color(0.8, 0.6, 0.2),
-    0.0
-  );
+  const materialRight = new MetalMaterial(new Color(0.8, 0.6, 0.2), 0.0);
+
   scene.add(new Sphere(new Vector(0, -100.5, -1), 100, materialGround));
   scene.add(new Sphere(new Vector(0, 0, -1), 0.5, materialCenter));
   scene.add(new Sphere(new Vector(-1, 0, -1), 0.5, materialLeft));
   scene.add(new Sphere(new Vector(-1, 0, -1), -0.4, materialLeft));
   scene.add(new Sphere(new Vector(1, 0, -1), 0.5, materialRight));
-*/
-  const R = Math.cos(Math.PI / 4);
-
-  const materialLeft = new DiffuseMaterial(
-    new Color(0., 0., 1.0)
-  );
-  const materialRight = new DiffuseMaterial(
-    new Color(1., 0., 0.)
-  );
-
-  scene.add(new Sphere(new Vector(-R, 0, -1), R, materialLeft));
-  scene.add(new Sphere(new Vector(R, 0, -1), R, materialRight));
 
   // camera
-  const camera = new Camera(90, aspectRatio);
+  const camera = new Camera(
+    new Vector(-2, 2, 1),
+    new Vector(0, 0, -1),
+    new Vector(0, 1, 0),
+    20,
+    aspectRatio
+  );
 
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
