@@ -177,7 +177,15 @@ class Scene {
 }
 
 class Camera {
-  constructor(lookFrom, lookAt, vup, vfov, aspectRatio) {
+  constructor(
+    lookFrom,
+    lookAt,
+    vup,
+    vfov,
+    aspectRatio,
+    aperture,
+    focusDist
+  ) {
     const theta = deg2rad(vfov);
     const h = Math.tan(theta / 2);
 
@@ -187,24 +195,31 @@ class Camera {
     this.focalLength = 1.0;
 
     const w = lookFrom.subtractVector(lookAt).unit;
-    const u = vup.cross(w).unit;
-    const v = w.cross(u);
+    this.u = vup.cross(w).unit;
+    this.v = w.cross(this.u);
 
     this.origin = lookFrom;
-    this.horizontal = u.scale(this.viewportWidth);
-    this.vertical = v.scale(this.viewportHeight);
+    this.horizontal = this.u.scale(this.viewportWidth * focusDist);
+    this.vertical = this.v.scale(this.viewportHeight * focusDist);
     this.lowerLeftCorner = this.origin
       .subtractVector(this.horizontal.divide(2))
       .subtractVector(this.vertical.divide(2))
-      .subtractVector(w);
+      .subtractVector(w.scale(focusDist));
+
+    this.lensRadius = aperture / 2;
   }
   getRay(u, v) {
+    const rd = getRandomVectorInUnitDisk().scale(this.lensRadius);
+    const offset = this.u.scale(rd.x)
+      .addVector(this.v.scale(rd.y));
+
     return new Ray(
-      this.origin,
+      this.origin.addVector(offset),
       this.lowerLeftCorner
         .addVector(this.horizontal.scale(u))
         .addVector(this.vertical.scale(v))
         .subtractVector(this.origin)
+        .subtractVector(offset)
       );
   }
 }
@@ -239,6 +254,14 @@ function getRandomVectorInHemisphere(normal) {
     return r;
   else
     return r.scale(-1.0);
+}
+
+function getRandomVectorInUnitDisk() {
+  while (true) {
+    const p = new Vector(getRandom(-1, 1), getRandom(-1, 1), 0);
+    if (p.lengthSquared >= 1) continue;
+    return p;
+  }
 }
 
 class DiffuseMaterial {

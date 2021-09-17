@@ -56,12 +56,20 @@ function main() {
   scene.add(new Sphere(new Vector(1, 0, -1), 0.5, materialRight));
 
   // camera
+  const lookFrom = new Vector(3, 3, 2);
+  const lookAt = new Vector(0, 0, -1);
+  const vup = new Vector(0, 1, 0);
+  const distToFocus = lookFrom.subtractVector(lookAt).length;
+  const aperture = 2.0;
+
   const camera = new Camera(
-    new Vector(-2, 2, 1),
-    new Vector(0, 0, -1),
-    new Vector(0, 1, 0),
+    lookFrom,
+    lookAt,
+    vup,
     20,
-    aspectRatio
+    aspectRatio,
+    aperture,
+    distToFocus
   );
 
   for (let y = 0; y < height; y++) {
