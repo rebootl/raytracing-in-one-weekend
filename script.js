@@ -1,7 +1,6 @@
-import { Vector, Color, writeColor, Ray, getRandomVectorInUnitSphere,
-  Sphere, Scene, Camera, DiffuseMaterial, MetalMaterial,
-  RefractingMaterial } from './lib.js';
-
+import { Vector, Color, writeColor, Ray, getRandom,
+  getRandomVectorInUnitSphere, getRandomColor, Sphere, Scene, Camera,
+  DiffuseMaterial, MetalMaterial, RefractingMaterial } from './lib.js';
 
 function rayColor(ray, scene, depth = 50) {
   // hitrecord
@@ -25,6 +24,47 @@ function rayColor(ray, scene, depth = 50) {
   return c1.scale(1.0 - t).addColor(c2.scale(t));
 }
 
+function getRandomScene() {
+  const scene = new Scene();
+
+  const materialGround = new DiffuseMaterial(new Color(0.5, 0.5, 0.5));
+  scene.add(new Sphere(new Vector(0, -1000, -1), 1000, materialGround));
+
+  for (let a = -11; a < 11; a++) {
+    for (let b = -11; b < 11; b++) {
+      const chooseMat = Math.random();
+      const center = new Vector(a + 0.9 * Math.random(), 0.2,
+        b + 0.9 * Math.random());
+
+      if (center.subtractVector(new Vector(4, 0.2, 0)).length) {
+        if (chooseMat < 0.8) {
+          const albedo = getRandomColor().mulColor(getRandomColor());
+          const sphereMaterial = new DiffuseMaterial(albedo);
+          scene.add(new Sphere(center, 0.2, sphereMaterial));
+        } else if (chooseMat < 0.95) {
+          const albedo = getRandomColor(0.5, 1);
+          const fuzz = getRandom(0, 0.5);
+          const sphereMaterial = new MetalMaterial(albedo, fuzz);
+          scene.add(new Sphere(center, 0.2, sphereMaterial));
+        } else {
+          const sphereMaterial = new RefractingMaterial(1.5);
+          scene.add(new Sphere(center, 0.2, sphereMaterial));
+        }
+      }
+    }
+  }
+  const material1 = new RefractingMaterial(1.5);
+  scene.add(new Sphere(new Vector(0, 1, 0), 1, material1));
+
+  const material2 = new DiffuseMaterial(new Color(0.4, 0.2, 0.1));
+  scene.add(new Sphere(new Vector(-4, 1, 0), 1, material2));
+
+  const material3 = new MetalMaterial(new Color(0.7, 0.6, 0.5), 0.0);
+  scene.add(new Sphere(new Vector(4, 1, 0), 1, material3));
+
+  return scene;
+}
+
 function main() {
   const c = document.querySelector('#mycanvas');
   const ctx = c.getContext('2d');
@@ -42,25 +82,14 @@ function main() {
   const imagedata = ctx.createImageData(width, height);
 
   // world
-  const scene = new Scene();
-
-  const materialGround = new DiffuseMaterial(new Color(0.8, 0.8, 0.0));
-  const materialCenter = new DiffuseMaterial(new Color(0.1, 0.2, 0.5));
-  const materialLeft = new RefractingMaterial(1.5);
-  const materialRight = new MetalMaterial(new Color(0.8, 0.6, 0.2), 0.0);
-
-  scene.add(new Sphere(new Vector(0, -100.5, -1), 100, materialGround));
-  scene.add(new Sphere(new Vector(0, 0, -1), 0.5, materialCenter));
-  scene.add(new Sphere(new Vector(-1, 0, -1), 0.5, materialLeft));
-  scene.add(new Sphere(new Vector(-1, 0, -1), -0.4, materialLeft));
-  scene.add(new Sphere(new Vector(1, 0, -1), 0.5, materialRight));
+  const scene = getRandomScene();
 
   // camera
-  const lookFrom = new Vector(3, 3, 2);
-  const lookAt = new Vector(0, 0, -1);
+  const lookFrom = new Vector(13, 2, 3);
+  const lookAt = new Vector(0, 0, 0);
   const vup = new Vector(0, 1, 0);
-  const distToFocus = lookFrom.subtractVector(lookAt).length;
-  const aperture = 2.0;
+  const distToFocus = 10.0;
+  const aperture = 0.1;
 
   const camera = new Camera(
     lookFrom,

@@ -236,9 +236,18 @@ function getRandom(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-function getRandomVector(min, max) {
+function getRandomVector() {
   return new Vector(getRandom(-1, 1), getRandom(-1, 1), getRandom(-1, 1));
 }
+
+function getRandomColor(min = 0, max = 1) {
+  return new Color(
+    getRandom(min, max),
+    getRandom(min, max),
+    getRandom(min, max)
+  );
+}
+
 
 function getRandomVectorInUnitSphere() {
   while (true) {
@@ -327,6 +336,6 @@ class RefractingMaterial {
   }
 }
 
-export { Vector, Color, writeColor, Ray, getRandomVectorInUnitSphere,
-  Sphere, Scene, Camera, clamp, DiffuseMaterial, MetalMaterial,
-  RefractingMaterial };
+export { Vector, Color, writeColor, Ray, getRandom,
+  getRandomVectorInUnitSphere, getRandomColor, Sphere, Scene, Camera,
+  clamp, DiffuseMaterial, MetalMaterial, RefractingMaterial };
